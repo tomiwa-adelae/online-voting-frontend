@@ -145,10 +145,10 @@ const VotePopUp = ({ candidateId, setShowVote }) => {
 				<PopUp>
 					<div className="w-[500px] text-center h-[200px] bg-white max-w-full shadow rounded-xl p-5 flex flex-col justify-center">
 						<div className="text-[25px] font-bold text-green-500">
-							Vote casted sussesfully
+							Vote casted successfully
 						</div>
 						<div className="text-gray-500 font-light">
-							You have successfully vast your vote to{" "}
+							You have successfully cast your vote to{" "}
 							{candidateId.full_name}
 							<div
 								className="bg-blue-400 mt-4 text-white py-2 rounded-lg cursor-pointer"
