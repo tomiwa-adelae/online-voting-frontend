@@ -124,6 +124,9 @@ const VotePopUp = ({ candidateId, setShowVote }) => {
 										className="absolute top-0 left-0 z-50"
 										ref={canvasRef}
 									></div>
+									<p className="text-lg text-white">
+										Please wait! Scanning...
+									</p>
 								</div>
 							</PopUp>
 						)}

@@ -1,7 +1,7 @@
 import axios from "axios";
-import Cookies from "js-cookie";
+import { BACKEND_URL } from "./index";
 
-export const apiUrl = "http://localhost:9000/api"; // Replace with your actual API URL
+export const apiUrl = `${BACKEND_URL}/api`; // Replace with your actual API URL
 
 const setupAxiosInterceptors = (token) => {
 	axios.interceptors.request.use(
