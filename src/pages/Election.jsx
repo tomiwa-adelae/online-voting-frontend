@@ -9,8 +9,11 @@ import {
 import { InlineIcon } from "@iconify/react/dist/iconify.js";
 import Candidates from "../components/UI/Candidates";
 import VotePopUp from "../components/UI/VotePopUp";
+import { useSelector } from "react-redux";
 
 const Election = () => {
+	const { currentUser } = useSelector((state) => state.auth);
+
 	const [voted, setVoted] = useState(false);
 	const { electionId } = useParams();
 	const [showVote, setShowVote] = useState(false);
@@ -61,6 +64,23 @@ const Election = () => {
 		fetchElection();
 		fetchCandidates();
 	}, [electionId]);
+
+	useEffect(() => {
+		function hasUserVoted(userId, candidates) {
+			for (let candidate of candidates) {
+				if (candidate.votes.includes(userId)) {
+					return true;
+				}
+			}
+			return false;
+		}
+
+		const userId = currentUser?.id;
+		if (candidates) {
+			const result = hasUserVoted(userId, candidates);
+			setVoted(result);
+		}
+	}, [candidates, currentUser]);
 
 	return (
 		<div>
@@ -126,6 +146,7 @@ const Election = () => {
 								item={item}
 								handleVote={handleVote}
 								running={running}
+								voted={voted}
 							/>
 						))}
 					</div>

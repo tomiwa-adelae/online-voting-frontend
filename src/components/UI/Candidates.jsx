@@ -1,19 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { InlineIcon } from "@iconify/react/dist/iconify.js";
-import { useSelector } from "react-redux";
 import VotePopUp from "./VotePopUp";
-const Candidates = ({ item, handleVote, running }) => {
-	const { currentUser } = useSelector((state) => state.auth);
-
-	const [voted, setVoted] = useState(false);
-
-	useEffect(() => {
-		if (item?.votes.includes(currentUser?.id)) {
-			setVoted(true);
-		} else {
-			setVoted(false);
-		}
-	}, [currentUser, item]);
+const Candidates = ({ item, handleVote, running, voted }) => {
 	return (
 		<div className="rounded-xl overflow-hidden bg-white relative border">
 			<div className="relative">
