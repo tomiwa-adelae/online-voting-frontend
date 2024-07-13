@@ -24,6 +24,7 @@ const Election = () => {
 	const [candidates, setCandidates] = useState([]);
 	const [loadingCandidate, setLoadingCandidate] = useState(true);
 	const [candidateId, setCandidateId] = useState(null);
+	const [winner, setWinner] = useState(null);
 
 	const fetchElection = async () => {
 		try {
@@ -33,6 +34,10 @@ const Election = () => {
 			setElection(res.election);
 			if (res.election.status === "Running") {
 				setRunning(true);
+			}
+			if (res.election.status === "Ended") {
+				setRunning(true);
+				setWinner(true);
 			}
 		} catch (error) {
 			console.error("Error fetching the election details:", error);
@@ -53,6 +58,15 @@ const Election = () => {
 			setError(null);
 			const res = await getElectionCandidate(electionId);
 			setCandidates(res.candidates);
+
+			let topCandidate = res.candidates[0];
+
+			res.candidates.forEach((candidate) => {
+				if (candidate.votes.length > topCandidate.votes.length) {
+					topCandidate = candidate;
+					setWinner(topCandidate);
+				}
+			});
 		} catch (error) {
 			setError("Error fetching the candidate details.");
 		} finally {
@@ -139,6 +153,13 @@ const Election = () => {
 						This is the details of the registered candidates for the
 						election.
 					</div>
+
+					{winner && (
+						<div className="text-xl bg-blue-400 text-white p-4 mt-4 mb-2 rounded-lg">
+							Our winner is {winner.full_name}
+						</div>
+					)}
+
 					<div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-5">
 						{candidates.map((item, i) => (
 							<Candidates
