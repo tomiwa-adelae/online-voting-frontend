@@ -1,7 +1,23 @@
 import React, { useEffect, useState } from "react";
 import { InlineIcon } from "@iconify/react/dist/iconify.js";
+import { useSelector } from "react-redux";
+
 import VotePopUp from "./VotePopUp";
 const Candidates = ({ item, handleVote, running, voted }) => {
+	const { currentUser } = useSelector((state) => state.auth);
+
+	const [votedFor, setVotedFor] = useState(null);
+
+	useEffect(() => {
+		if (item) {
+			if (item.votes.includes(currentUser?.id)) {
+				setVotedFor(true);
+			} else {
+				setVotedFor(false);
+			}
+		}
+	}, [currentUser, item]);
+
 	return (
 		<div className="rounded-xl overflow-hidden bg-white relative border">
 			<div className="relative">
@@ -14,18 +30,21 @@ const Candidates = ({ item, handleVote, running, voted }) => {
 					alt=""
 				/>
 				{running ? (
-					voted ? (
+					votedFor ? (
 						<div className="absolute bottom-0 right-0 p-2 text-[12px] flex items-center gap-2  justify-center bg-blue-900 text-white">
 							Voted
 							<InlineIcon icon="lucide:vote" />
 						</div>
 					) : (
-						<button
-							onClick={() => handleVote(item)}
-							className="absolute bottom-0 right-0 p-2 text-[12px] flex items-center gap-2  justify-center bg-red-900 text-white"
-						>
-							Cast Vote <InlineIcon icon="mdi:vote" />
-						</button>
+						!voted && (
+							<button
+								onClick={() => handleVote(item)}
+								disabled={votedFor}
+								className="absolute bottom-0 right-0 p-2 text-[12px] flex items-center gap-2  justify-center bg-red-900 text-white"
+							>
+								Cast Vote <InlineIcon icon="mdi:vote" />
+							</button>
+						)
 					)
 				) : (
 					<div className="absolute bottom-0 right-0 p-2 text-[12px] flex items-center gap-2  justify-center bg-orange-600 text-white">

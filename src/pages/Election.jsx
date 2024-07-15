@@ -25,6 +25,7 @@ const Election = () => {
 	const [loadingCandidate, setLoadingCandidate] = useState(true);
 	const [candidateId, setCandidateId] = useState(null);
 	const [winner, setWinner] = useState(null);
+	const [tie, setTie] = useState(null);
 
 	const fetchElection = async () => {
 		try {
@@ -65,8 +66,20 @@ const Election = () => {
 				if (candidate.votes.length > topCandidate.votes.length) {
 					topCandidate = candidate;
 					setWinner(topCandidate);
+				} else if (candidate.votes.length < topCandidate.votes.length) {
+					topCandidate = res.candidates[0];
+					setWinner(topCandidate);
+				} else {
+					return;
 				}
 			});
+
+			if (
+				res.candidates[0].votes.length ===
+				res.candidates[1].votes.length
+			) {
+				setTie(true);
+			}
 		} catch (error) {
 			setError("Error fetching the candidate details.");
 		} finally {
@@ -154,9 +167,15 @@ const Election = () => {
 						election.
 					</div>
 
-					{winner && (
+					{!tie && winner && (
 						<div className="text-xl bg-blue-400 text-white p-4 mt-4 mb-2 rounded-lg">
 							Our winner is {winner.full_name}
+						</div>
+					)}
+
+					{tie && (
+						<div className="text-xl bg-blue-400 text-white p-4 mt-4 mb-2 rounded-lg">
+							We have a tie.{" "}
 						</div>
 					)}
 
