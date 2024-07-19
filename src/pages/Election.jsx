@@ -26,6 +26,7 @@ const Election = () => {
 	const [candidateId, setCandidateId] = useState(null);
 	const [winner, setWinner] = useState(null);
 	const [tie, setTie] = useState(null);
+	const [electionStatus, setElectionStatus] = useState(null);
 
 	const fetchElection = async () => {
 		try {
@@ -35,10 +36,15 @@ const Election = () => {
 			setElection(res.election);
 			if (res.election.status === "Running") {
 				setRunning(true);
+				setElectionStatus(res.election.status);
 			}
 			if (res.election.status === "Ended") {
 				setRunning(true);
 				setWinner(true);
+				setElectionStatus(res.election.status);
+			}
+			if (res.election.status === "Pending") {
+				setElectionStatus(res.election.status);
 			}
 		} catch (error) {
 			console.error("Error fetching the election details:", error);
@@ -90,7 +96,7 @@ const Election = () => {
 	useEffect(() => {
 		fetchElection();
 		fetchCandidates();
-	}, [electionId]);
+	}, []);
 
 	useEffect(() => {
 		function hasUserVoted(userId, candidates) {
@@ -167,15 +173,15 @@ const Election = () => {
 						election.
 					</div>
 
-					{!tie && winner && (
+					{electionStatus === "Ended" && !tie && winner && (
 						<div className="text-xl bg-blue-400 text-white p-4 mt-4 mb-2 rounded-lg">
 							Our winner is {winner.full_name}
 						</div>
 					)}
 
-					{tie && (
+					{electionStatus === "Ended" && tie && (
 						<div className="text-xl bg-blue-400 text-white p-4 mt-4 mb-2 rounded-lg">
-							We have a tie.{" "}
+							We have a tie.
 						</div>
 					)}
 

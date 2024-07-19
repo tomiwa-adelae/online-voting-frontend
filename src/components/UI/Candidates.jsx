@@ -48,7 +48,7 @@ const Candidates = ({ item, handleVote, running, voted }) => {
 					)
 				) : (
 					<div className="absolute bottom-0 right-0 p-2 text-[12px] flex items-center gap-2  justify-center bg-orange-600 text-white">
-						Election is Yet to start or has Endded
+						Election is Yet to start
 						<InlineIcon icon="lucide:vote" />
 					</div>
 				)}
